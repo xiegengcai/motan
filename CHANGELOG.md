@@ -1,5 +1,80 @@
 # Change Log
 
+## [0.3.0](https://github.com/weibocom/motan/tree/0.3.0) (2017-03-09)
+[Full Changelog](https://github.com/weibocom/motan/compare/0.2.3...0.3.0)
+
+**Implemented enhancements:**
+
+- async call [\#372](https://github.com/weibocom/motan/pull/372) ([Ray](https://github.com/rayzhang0603))
+
+**Fixed bugs:**
+
+**Merged pull requests:**
+
+
+## [0.2.3](https://github.com/weibocom/motan/tree/0.2.3) (2017-02-16)
+[Full Changelog](https://github.com/weibocom/motan/compare/0.2.2...0.2.3)
+
+**Implemented enhancements:**
+
+- OpenTracing supported [\#311](https://github.com/weibocom/motan/pull/311) ([Ray](https://github.com/rayzhang0603))
+- change xsd type to string  [\#326](https://github.com/weibocom/motan/pull/326) ([Ray](https://github.com/rayzhang0603))
+
+**Fixed bugs:**
+
+- add Ordered interface to AnnotationBean [\#322](https://github.com/weibocom/motan/pull/322) ([feilaoda](https://github.com/feilaoda)) 
+- available after register while heartbeat switcher is open  [\#305](https://github.com/weibocom/motan/pull/305) ([Ray](https://github.com/rayzhang0603))
+
+**Merged pull requests:**
+
+
+## [0.2.2](https://github.com/weibocom/motan/tree/0.2.2) (2016-11-25)
+[Full Changelog](https://github.com/weibocom/motan/compare/0.2.1...0.2.2)
+
+**Implemented enhancements:**
+
+- local method do not request server [\#286](https://github.com/weibocom/motan/pull/286) ([Ray](https://github.com/rayzhang0603))
+- use ThreadLocalRandom
+
+
+**Fixed bugs:**
+
+- loadbalance index overflow
+- consul registry notify NPE
+
+**Merged pull requests:**
+
+
+## [0.2.1](https://github.com/weibocom/motan/tree/0.2.1) (2016-08-18)
+[Full Changelog](https://github.com/weibocom/motan/compare/0.2.0...0.2.1)
+
+**Implemented enhancements:**
+
+- add Initialization SPI [\#171](https://github.com/weibocom/motan/pull/171) ([Ray](https://github.com/rayzhang0603))
+- add abstract mockprotocol [\#171](https://github.com/weibocom/motan/pull/171) ([Ray](https://github.com/rayzhang0603))
+
+**Fixed bugs:**
+
+
+**Merged pull requests:**
+
+- Added hprose serialization support [\#162](https://github.com/weibocom/motan/pull/162) ([小马哥](https://github.com/andot)) 
+
+## [0.2.0](https://github.com/weibocom/motan/tree/0.2.0) (2016-08-05)
+[Full Changelog](https://github.com/weibocom/motan/compare/0.1.2...0.2.0)
+
+**Implemented enhancements:**
+
+- support yar protocol [\#160](https://github.com/weibocom/motan/pull/160) ([Ray](https://github.com/rayzhang0603))
+
+**Fixed bugs:**
+
+- fix bug of LocalFirstLoadBalance referer select [\#155](https://github.com/weibocom/motan/issues/155) 
+
+**Merged pull requests:**
+
+- add annotation for spring [\#101](https://github.com/weibocom/motan/pull/101) ([feilaoda](https://github.com/feilaoda)) 
+
 ## [0.1.2](https://github.com/weibocom/motan/tree/0.1.2) (2016-06-27)
 [Full Changelog](https://github.com/weibocom/motan/compare/0.1.1...0.1.2)
 
