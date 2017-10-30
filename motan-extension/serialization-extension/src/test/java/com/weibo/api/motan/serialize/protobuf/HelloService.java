@@ -13,21 +13,25 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package com.weibo.api.motan.serialize.protobuf;
 
-/**
- *
- */
-package com.weibo.controller;
+import com.weibo.api.motan.serialize.protobuf.gen.UserProto.Address;
+import com.weibo.api.motan.serialize.protobuf.gen.UserProto.User;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+public interface HelloService {
 
+	Address queryByUid(int uid);
 
-@Controller
-public class IndexController {
+	Long boxIfNotZero(int value);
 
-    @RequestMapping(value = {"/", "/index"})
-    public String index() {
-        return "index";
-    }
+	boolean isUserAddress(User user, Address address);
+
+	void testException();
+
+	boolean isNull(User user);
+
+	User copy(User origin);
+
+	String sumAsString(int a, int b);
+
 }

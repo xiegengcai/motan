@@ -8,6 +8,7 @@
   - [其他调用示例](#其他调用示例)
     - [提供YAR协议服务](#提供yar协议服务)
     - [使用注解方式配置motan](#使用注解方式配置motan)
+    - [使用Restful协议](#使用restful协议)
   - [使用OpenTracing](#使用opentracing)
 
 快速入门中会给出一些基本使用场景下的配置方式，更详细的使用文档请参考[用户指南](zh_userguide).
@@ -26,24 +27,24 @@
     <dependency>
         <groupId>com.weibo</groupId>
         <artifactId>motan-core</artifactId>
-        <version>0.2.2</version>
+        <version>RELEASE</version>
     </dependency>
     <dependency>
         <groupId>com.weibo</groupId>
         <artifactId>motan-transport-netty</artifactId>
-        <version>0.2.2</version>
+        <version>RELEASE</version>
     </dependency>
     
     <!-- only needed for spring-based features -->
     <dependency>
         <groupId>com.weibo</groupId>
         <artifactId>motan-springsupport</artifactId>
-        <version>0.2.2</version>
+        <version>RELEASE</version>
     </dependency>
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-context</artifactId>
-        <version>4.2.4.RELEASE</version>
+        <version>RELEASE</version>
     </dependency>
    ```
 
@@ -172,7 +173,7 @@
     <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.10</version>
+        <version>RELEASE</version>
         <executions>
             <execution>
                 <phase>generate-sources</phase>
@@ -263,7 +264,7 @@ ui后台 [http://localhost:8500/ui](http://localhost:8500/ui)
     <dependency>
         <groupId>com.weibo</groupId>
         <artifactId>motan-registry-consul</artifactId>
-        <version>0.1.1</version>
+        <version>RELEASE</version>
     </dependency>
     ```
 
@@ -320,7 +321,7 @@ ui后台 [http://localhost:8500/ui](http://localhost:8500/ui)
     <dependency>
         <groupId>com.weibo</groupId>
         <artifactId>motan-registry-zookeeper</artifactId>
-        <version>0.2.1</version>
+        <version>RELEASE</version>
     </dependency>
     ```
 
@@ -366,7 +367,7 @@ ui后台 [http://localhost:8500/ui](http://localhost:8500/ui)
 
 ## <a id="other"></a>其他调用示例
 
-###<a id="motan-yar"></a>提供YAR协议服务
+### <a id="motan-yar"></a>提供YAR协议服务
     
 [YAR](https://github.com/laruence/yar)协议是php的一个rpc扩展，motan框架可以提供yar协议的RPC服务
 1、引入motan-protocol-yar.jar
@@ -375,7 +376,7 @@ ui后台 [http://localhost:8500/ui](http://localhost:8500/ui)
     <dependency>
         <groupId>com.weibo</groupId>
         <artifactId>motan-protocol-yar</artifactId>
-        <version>0.2.1</version>
+        <version>RELEASE</version>
     </dependency>
    ```
     
@@ -404,8 +405,8 @@ ui后台 [http://localhost:8500/ui](http://localhost:8500/ui)
 具体配置见motan-demo模块
 YAR协议使用[yar-java](https://github.com/weibocom/yar-java)进行解析，java作为YAR client时可以直接使用
 
-###<a id="motan-annotation"></a>使用注解方式配置motan
-####server端配置
+### <a id="motan-annotation"></a>使用注解方式配置motan
+#### server端配置
 
 1、声明Annotation用来指定需要解析的包名
 
@@ -483,7 +484,7 @@ YAR协议使用[yar-java](https://github.com/weibocom/yar-java)进行解析，ja
     
 server端详细配置请参考motan-demo模块
 
-####client端配置
+#### client端配置
 1、声明Annotation、protocolConfig、RegistryConfig的配置bean。方式与server端配置类似。
 
 2、配置basicRefererConfig bean
@@ -538,6 +539,155 @@ server端详细配置请参考motan-demo模块
     
 client端详细配置请参考motan-demo模块
 
+### <a id="restful-protocol"></a>使用restful协议
+#### 功能支持
+  1. 支持rpc单独进程和部署到servlet容器中
+  2. 完全支持原有服务治理功能
+  3. 支持rpc request/response的attachment机制
+  4. 完全支持rpc filter机制
+  5. rest服务编程完全按照JAX-RS代码方式编写
+
+#### 前置条件
+  引入motan-protocol-restful包
+   ```xml
+    <dependency>
+        <groupId>com.weibo</groupId>
+        <artifactId>motan-protocol-restful</artifactId>
+        <version>RELEASE</version>
+    </dependency>
+   ```
+
+#### 接口声明与实现
+
+服务接口
+
+   ```java
+    @Path("/rest")
+    public interface RestfulService {
+        @GET
+        @Produces(MediaType.APPLICATION_JSON)
+        List<User> getUsers(@QueryParam("uid") int uid);
+    
+        @GET
+        @Path("/primitive")
+        @Produces(MediaType.TEXT_PLAIN)
+        String testPrimitiveType();
+    
+        @POST
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        Response add(@FormParam("id") int id, @FormParam("name") String name);
+    
+        @GET
+        @Path("/exception")
+        @Produces(MediaType.APPLICATION_JSON)
+        void testException();
+    }
+   ```
+
+服务实现
+
+   ```java
+    public class RestfulServerDemo implements RestfulService {
+           
+        @Override
+        public List<User> getUsers(@CookieParam("uid") int uid) {
+            return Arrays.asList(new User(uid, "name" + uid));
+        }
+    
+        @Override
+        public String testPrimitiveType() {
+            return "helloworld!";
+        }
+    
+        @Override
+        public Response add(@FormParam("id") int id, @FormParam("name") String name) {
+            return Response.ok().cookie(new NewCookie("ck", String.valueOf(id))).entity(new User(id, name)).build();
+        }
+    
+        @Override
+        public void testException() {
+            throw new UnsupportedOperationException("unsupport");
+        }
+    }
+   ```
+
+#### 配置restserver
+
+##### 独立rpc进程方式
+
+server端配置：
+
+   ```xml
+        <bean id="motanDemoServiceImpl" class="com.weibo.motan.demo.server.RestfulServerDemo"/>
+    
+        <motan:registry regProtocol="local" name="registry" />
+    
+        <motan:protocol id="demoRest" name="restful" endpointFactory="netty"/>
+    
+        <motan:basicService export="demoRest:8004" group="motan-demo-rpc" module="motan-demo-rpc"
+                            application="myMotanDemo" registry="registry" id="serviceBasicConfig"/>
+    
+        <motan:service interface="com.weibo.motan.demo.service.RestfulService"
+                       ref="motanDemoServiceImpl" basicService="serviceBasicConfig"/>
+   ```
+
+client端配置：
+
+   ```xml
+        <motan:registry regProtocol="direct" name="registry" address="127.0.0.1:8004"/>
+    
+        <!-- restful 协议 -->
+        <motan:protocol id="restfulProtocol" name="restful" endpointFactory="netty"/>
+    
+        <!-- 通用referer基础配置 -->
+        <motan:basicReferer requestTimeout="1000" group="motan-demo-rpc" module="motan-demo-rpc"
+                            application="myMotanDemo" protocol="restfulProtocol" registry="registry"
+                            id="motantestClientBasicConfig" />
+    
+        <!-- 使用 restful 协议-->
+        <motan:referer id="restfulReferer" interface="com.weibo.motan.demo.service.RestfulService"
+                       basicReferer="motantestClientBasicConfig"/>
+   ```
+
+
+##### 集成到java应用服务器中(如部署到tomcat中)
+
+此时需要注意contextpath问题
+
+   `<motan:protocol name="restful" endpointFactory="servlet" />` 
+
+服务端还需配置web.xml如下:
+
+   ```xml
+
+    <!-- 此filter必须在spring ContextLoaderFilter之前 -->
+    <listener>
+        <listener-class>com.weibo.api.motan.protocol.restful.support.servlet.RestfulServletContainerListener</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+        <load-on-startup>1</load-on-startup>
+        <init-param>
+            <param-name>resteasy.servlet.mapping.prefix</param-name>
+            <param-value>/servlet</param-value>  <!-- 此处实际为servlet-mapping的url-pattern，具体配置见resteasy文档-->
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/servlet/*</url-pattern>
+    </servlet-mapping>
+   ```
+
+集成到java应用服务器的方式（servlet方式）适合不同语言直接http调用，需要注意url中contextpath的问题。推荐使用rpc进程方式
+
+java作为client端调用时，推荐server端同时导出restful和motan两种协议，java使用motan协议进行调用，其他语言使用标准http协议调用。
+
+详细请参考motan-demo模块中的RestfulServerDemo、RestfulClient
+
 ## <a id="opentracing"></a>使用OpenTracing
 
 Motan通过filter的SPI扩展机制支持[OpenTracing](http://opentracing.io)，可以支持任何实现了OpenTracing标准的trace实现。使用OpenTracing需要以下步骤。
@@ -547,8 +697,8 @@ Motan通过filter的SPI扩展机制支持[OpenTracing](http://opentracing.io)，
    ```xml
     <dependency>
         <groupId>com.weibo</groupId>
-        <artifactId>motan-protocol-yar</artifactId>
-        <version>0.2.3</version>
+        <artifactId>filter-opentracing</artifactId>
+        <version>RELEASE</version>
     </dependency>
    ```
 

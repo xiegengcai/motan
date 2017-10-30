@@ -21,7 +21,7 @@
     <parent>
         <artifactId>motan</artifactId>
         <groupId>com.weibo</groupId>
-        <version>0.3.1-SNAPSHOT</version>
+        <version>0.3.2-SNAPSHOT</version>
     </parent>
     <artifactId>motan-core</artifactId>
     <name>motan-core</name>
@@ -51,6 +51,12 @@
             <groupId>com.squareup</groupId>
             <artifactId>javapoet</artifactId>
             <version>1.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <build>
